@@ -35,6 +35,10 @@ jobs:
       - name: Build web app
         run: python -m pygbag --build .
 
+      - name: Hide Pygbag startup messages
+        run: |
+          python -c "from pathlib import Path; p=Path('build/web/index.html'); s=p.read_text(encoding='utf-8'); assert '</head>' in s; p.write_text(s.replace('</head>', '<style>#infobox{display:none!important}body{background:#100d12!important}</style></head>', 1), encoding='utf-8')"
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

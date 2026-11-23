@@ -960,6 +960,7 @@ async def main():
         pygame.mixer.init()
     pygame.mixer.music.load(str(Path(__file__).with_name("rose_music.ogg")))
     pygame.mixer.music.set_volume(0.65)
+    pygame.mixer.music.play(-1)
     if not web:
         pygame.mixer.music.play(-1)
     size = (W, H) if web else window_size()
@@ -974,17 +975,12 @@ async def main():
     pygame.display.set_caption(TITLE)
     renderer, clock = Renderer(), pygame.time.Clock()
     t, paused = 0.0, False
-    audio_started = not web
-    prompt = pygame.font.SysFont(MONO, 26).render("TAP TO START MUSIC", True, ACCENT) if web else None
     screen = renderer.draw(t)
     while True:
         for e in pygame.event.get():
             if e.type == pygame.QUIT or (e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE):
                 pygame.quit()
                 return 0
-            if web and not audio_started and e.type in (pygame.MOUSEBUTTONDOWN, pygame.FINGERDOWN):
-                pygame.mixer.music.play(-1)
-                audio_started = True
             if e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
                 paused = not paused
             if e.type == pygame.KEYDOWN and e.key == pygame.K_r:
@@ -992,14 +988,12 @@ async def main():
             if e.type == pygame.KEYDOWN and e.key == pygame.K_s:
                 pygame.image.save(screen, str(Path(__file__).with_name(f"bouquet_{int(time.time())}.png")))
         dt = clock.tick(30) / 1000
-        if not paused and audio_started:
+        if not paused:
             t += min(dt, 1 / 15)
             if t > LOOP:
                 t = 0.0
             screen = renderer.draw(t)
         window.blit(screen if size == (W, H) else pygame.transform.smoothscale(screen, size), (0, 0))
-        if prompt is not None and not audio_started:
-            window.blit(prompt, ((size[0] - prompt.get_width()) // 2, size[1] - 72))
         pygame.display.flip()
         await asyncio.sleep(0)
 
