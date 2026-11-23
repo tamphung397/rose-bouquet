@@ -51,10 +51,9 @@ Then open `http://localhost:8000`. Pygbag uses `main.py` as the browser entry po
 
 Push this project to a GitHub repository on the `main` branch. The workflow at
 `.github/workflows/deploy-pages.yml` builds the web app and deploys it automatically.
-The deployment shows the YouTube intro before opening the bouquet. In the repository,
-open **Settings → Pages** and set the source to **GitHub Actions**.
-The intro's audio can be enabled with **Bật tiếng / nhạc** and then loops behind the
-bouquet. After the workflow completes, the public URL is shown in its deployment job.
+The deployment opens the bouquet directly and plays its bundled soundtrack. In the
+repository, open **Settings → Pages** and set the source to **GitHub Actions**.
+After the workflow completes, the public URL is shown in its deployment job.
 
 ## Using this code
 
