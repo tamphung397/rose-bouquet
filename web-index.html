@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rose bouquet</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; }
+    body {
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: #100d12;
+      color: #fff;
+      font: 16px system-ui, sans-serif;
+    }
+    #intro {
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto auto auto;
+      gap: 12px;
+      width: min(100vw, 56.25vh);
+      height: 100vh;
+      padding: 16px;
+    }
+    #player { width: 100%; height: 100%; min-height: 0; }
+    #status { margin: 0; text-align: center; }
+    #skip {
+      justify-self: center;
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 20px;
+      background: #ff7ab6;
+      color: #21121a;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    #sound {
+      justify-self: center;
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 20px;
+      background: #fff;
+      color: #21121a;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    #sound:disabled { opacity: 0.55; cursor: wait; }
+    #game {
+      display: none;
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <main id="intro">
+    <div id="player"></div>
+    <p id="status">Video tự chạy ở chế độ tắt tiếng. Bấm bật tiếng để nhạc tiếp tục khi xem bó hoa.</p>
+    <button id="sound" type="button" disabled>Bật tiếng / nhạc</button>
+    <button id="skip" type="button">Bỏ qua video</button>
+  </main>
+  <iframe id="game" title="Rose bouquet in ASCII" allow="autoplay; fullscreen" allowfullscreen></iframe>
+  <script>
+    const game = document.getElementById("game");
+    const soundButton = document.getElementById("sound");
+    let started = false;
+    let player;
+
+    function startGame() {
+      if (started) return;
+      started = true;
+      if (player) {
+        player.pauseVideo();
+        player.mute();
+      }
+      game.src = "./game.html";
+      game.style.display = "block";
+    }
+
+    document.getElementById("skip").addEventListener("click", startGame);
+    soundButton.addEventListener("click", () => {
+      if (!player) return;
+      player.unMute();
+      player.setVolume(100);
+      player.playVideo();
+      soundButton.disabled = true;
+      soundButton.textContent = "Đã bật tiếng / nhạc";
+    });
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player("player", {
+        videoId: "ECsSsAvGma8",
+        playerVars: { autoplay: 1, controls: 1, playsinline: 1, rel: 0 },
+        events: {
+          onReady(event) {
+            event.target.mute();
+            event.target.playVideo();
+            soundButton.disabled = false;
+          },
+          onStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+              startGame();
+            }
+          }
+        }
+      });
+    }
+  </script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>

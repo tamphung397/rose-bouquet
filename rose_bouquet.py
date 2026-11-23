@@ -379,7 +379,7 @@ class Bouquet:
 
 
 BOUQUET = Bouquet()
-ROSE_APPEAR = None                              # filled in once rose() exists: each bud pops on whole
+ROSE_APPEAR = [None] * N_ROSES                  # each bud's points are prepared when it first appears
 BLOSSOM_APPEAR = T_BLOSSOM[0] + (T_BLOSSOM[1] - T_BLOSSOM[0]) * np.random.default_rng(43).random(N_BLOSSOM)
 
 
@@ -544,9 +544,6 @@ def assemble(states):
 
 def scene(t):
     # every point of the bouquet at time t: where, how bright, what colour, which part
-    global ROSE_APPEAR, BLOSSOM_APPEAR
-    if ROSE_APPEAR is None:
-        ROSE_APPEAR = [np.full(len(rose(k, 0.0, 0.0)[0]), BUD_POP[k], np.float32) for k in range(N_ROSES)]
     op = opening(t)
     yaw = sway(t)
     Ry = spin_y(yaw)
@@ -554,8 +551,12 @@ def scene(t):
     # the roses: those at the back of the dome, facing away, are hidden by the others and left out
     states, heads = [], []
     for k in range(N_ROSES):
+        if t < BUD_POP[k]:
+            continue
         if (Ry @ ROSE_DIR[k]) @ VIEW < -0.3:
             continue
+        if ROSE_APPEAR[k] is None:
+            ROSE_APPEAR[k] = np.full(len(rose(k, 0.0, 0.0)[0]), BUD_POP[k], np.float32)
         flash = np.clip(1 - (t - ROSE_START[k]) / FLASH, 0, 1) ** 2 if t >= ROSE_START[k] else 0.0
         states.append((k, round(float(op[k]) * STEPS) / STEPS, round(float(flash), 1)))
         heads.append(((ROSE_POS[k] + ROSE_DIR[k] * 0.10 * (0.5 + op[k])) @ Ry.T, flash))
@@ -954,8 +955,21 @@ def window_size():
 
 async def main():
     pygame.init()
-    size = window_size()
+    if pygame.mixer.get_init() is None:
+        pygame.mixer.init()
+    pygame.mixer.music.load(str(Path(__file__).with_name("rose_music.ogg")))
+    pygame.mixer.music.set_volume(0.65)
+    pygame.mixer.music.play(-1)
+    web = sys.platform == "emscripten"
+    size = (W, H) if web else window_size()
     window = pygame.display.set_mode(size)
+    if web:
+        import platform
+
+        canvas = platform.window.canvas
+        canvas.style.width = "100vw"
+        canvas.style.height = "100vh"
+        canvas.style.objectFit = "contain"
     pygame.display.set_caption(TITLE)
     renderer, clock = Renderer(), pygame.time.Clock()
     t, paused = 0.0, False
