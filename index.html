@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050509">
+  <title>Rose bouquet in ASCII</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #050509; }
+    body { display: grid; place-items: center; color: #fff; font-family: system-ui, sans-serif; }
+    canvas { width: 100vw; height: 100vh; object-fit: contain; display: block; }
+    #sound {
+      position: fixed;
+      top: max(12px, env(safe-area-inset-top));
+      right: max(12px, env(safe-area-inset-right));
+      z-index: 2;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 999px;
+      padding: 10px 15px;
+      color: #ffe8f2;
+      background: rgba(25, 16, 25, .82);
+      font: 600 14px system-ui, sans-serif;
+      backdrop-filter: blur(8px);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bouquet" width="791" height="1050" aria-label="Animated ASCII rose bouquet"></canvas>
+  <audio id="music" src="./rose_music.ogg" autoplay loop preload="auto"></audio>
+  <button id="sound" type="button" aria-label="Bật hoặc tắt nhạc" aria-pressed="false">Bật nhạc</button>
+  <script src="./app.js" defer></script>
+</body>
+</html>

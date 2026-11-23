@@ -24,25 +24,15 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install Pygbag
-        run: python -m pip install pygbag
-
-      - name: Build web app
-        run: python -m pygbag --build .
-
-      - name: Hide Pygbag startup messages
+      - name: Stage static web app
         run: |
-          python -c "from pathlib import Path; p=Path('build/web/index.html'); s=p.read_text(encoding='utf-8'); assert '</head>' in s; p.write_text(s.replace('</head>', '<style>#infobox{display:none!important}body{background:#100d12!important}</style></head>', 1), encoding='utf-8')"
+          mkdir site
+          cp index.html app.js rose_music.ogg site/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: build/web
+          path: site
 
   deploy:
     environment:

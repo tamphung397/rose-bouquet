@@ -961,8 +961,6 @@ async def main():
     pygame.mixer.music.load(str(Path(__file__).with_name("rose_music.ogg")))
     pygame.mixer.music.set_volume(0.65)
     pygame.mixer.music.play(-1)
-    if not web:
-        pygame.mixer.music.play(-1)
     size = (W, H) if web else window_size()
     window = pygame.display.set_mode(size)
     if web:

@@ -23,7 +23,8 @@ sways gently from side to side under twinkling stars, dew glinting on the petals
 - **Extras:** sparks, falling petals, dew glints, a gleam on the ribbon, a typed message with a beating heart.
 - **Rendering:** a character grid drawn with a soft double glow and fading trails.
 
-Built with Python, NumPy and pygame-ce.
+The desktop version is built with Python, NumPy and pygame-ce. The browser version
+uses HTML, JavaScript and Canvas, so it starts without downloading a Python runtime.
 
 ## Run it
 
@@ -32,27 +33,27 @@ pip install -r requirements.txt
 python rose_bouquet.py
 ```
 
-The Python and browser apps play and loop the soundtrack extracted from `rose.mp4`.
+Both versions play and loop the soundtrack extracted from `rose.mp4`.
 
 Keys: `Space` pause · `R` restart · `S` save a screenshot · `Esc` exit
 
 ## Run in a browser
 
-Install Pygbag and run the project from its parent folder:
+Serve the static web app from the project folder:
 
 ```
-pip install pygbag
-python -m pygbag ROSE-BOUQUET
+python -m http.server 8000
 ```
 
-Then open `http://localhost:8000`. Pygbag uses `main.py` as the browser entry point.
+Then open `http://localhost:8000`. The animation and soundtrack attempt to start immediately.
+Use **Bật nhạc / Tắt nhạc** to control playback. If the browser blocks autoplay, tap the button
+or anywhere on the animation once; browser autoplay restrictions cannot be bypassed.
 
 ## Deploy to GitHub Pages
 
 Push this project to a GitHub repository on the `main` branch. The workflow at
-`.github/workflows/deploy-pages.yml` builds the web app and deploys it automatically.
-The deployment opens the bouquet directly and plays its bundled soundtrack. In the
-repository, open **Settings → Pages** and set the source to **GitHub Actions**.
+`.github/workflows/deploy-pages.yml` stages the root-level web files and deploys them automatically.
+In the repository, open **Settings → Pages** and set the source to **GitHub Actions**.
 After the workflow completes, the public URL is shown in its deployment job.
 
 ## Using this code
