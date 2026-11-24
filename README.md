@@ -48,6 +48,7 @@ python -m http.server 8000
 Then open `http://localhost:8000`. The animation and soundtrack attempt to start immediately.
 Use **Bật nhạc / Tắt nhạc** to control playback. If the browser blocks autoplay, tap the button
 or anywhere on the animation once; browser autoplay restrictions cannot be bypassed.
+The web player prefers MP3 for Safari compatibility and falls back to OGG.
 
 ## Deploy to GitHub Pages
 

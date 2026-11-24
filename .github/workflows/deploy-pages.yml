@@ -27,7 +27,7 @@ jobs:
       - name: Stage static web app
         run: |
           mkdir site
-          cp index.html app.js rose_music.ogg site/
+          cp index.html app.js rose_music.mp3 rose_music.ogg site/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

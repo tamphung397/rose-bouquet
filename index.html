@@ -27,7 +27,10 @@
 </head>
 <body>
   <canvas id="bouquet" width="791" height="1050" aria-label="Animated ASCII rose bouquet"></canvas>
-  <audio id="music" src="./rose_music.ogg" autoplay loop preload="auto"></audio>
+  <audio id="music" autoplay loop preload="auto">
+    <source src="./rose_music.mp3" type="audio/mpeg">
+    <source src="./rose_music.ogg" type="audio/ogg">
+  </audio>
   <button id="sound" type="button" aria-label="Bật hoặc tắt nhạc" aria-pressed="false">Bật nhạc</button>
   <script src="./app.js" defer></script>
 </body>
